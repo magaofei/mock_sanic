@@ -4,16 +4,19 @@ from sanic.response import json
 
 app = Sanic()
 
-# seconds
-WAIT_TIME = 0.2
-
 HOST = '0.0.0.0'
 PORT = 8010
+WORKERS = 1
 
 @app.route('/')
 async def test(request):
-    await sleep(WAIT_TIME)
     return json({'hello': 'world'})
 
+@app.route('/sleep/<sleep_value:int>')
+async def test(request, sleep_value):
+	""" sleep_value : int """
+    await sleep(sleep_value)
+    return json({'sleep': sleep_value})
+
 if __name__ == '__main__':
-    app.run(host=HOST, port=PORT)
+    app.run(host=HOST, port=PORT, workers=WORKERS)
